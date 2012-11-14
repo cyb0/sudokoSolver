@@ -1,5 +1,5 @@
 /* This program is a project to write a function which will calculate the values
- * of cells in a Sudoko game. 
+ * of cells in a given Sudoko game. 
  *
  * by Tsvetomir Totev <cybershade@gmail.com>
  *
@@ -29,15 +29,18 @@ typedef value sudokoGrid[GRID_SIZE]; // think of sudokoGrid instead of just an a
 
 int main (int argc, const char * arg []) {
 
+    printf ("Running...\n");
     // testSudukoGrid();
 
     //defines a name for a sudukoGrid
     sudokoGrid sample;
 
+
     // TODO: read the initial grid 
     readGame(sample);
 
-    // showGame (sample);
+    showGame (sample);
+
     if (hasSolution(sample)) {
         showGame(sample);
     }
@@ -84,35 +87,64 @@ void readGame (sudokoGrid game) {
     
     if ( fp == 0 ) {
         printf ("Could not read file\n");
-    } else { 
-        int candidateCell; // loop control var, also a cell location 
+    } 
 
-        int x; // stores the current char from the file
-        
-        for (candidateCell = 0; candidateCell < 80; candidateCell++) {
-            if ((x = fgetc( fp ) ) != EOF) {
-                showInitialGame(game);
-            } else {
-                // check if x is legal TODO @ isLegal()
-                if ((x == EMPTY_VALUE) || (x >= MIN_VALUE && x <= MAX_VALUE)) {
-                    setCell(game, candidateCell, x); // set the cell to x
-                }
+    cell location; // loop control 
+    value ch; // character from file
+
+    for (location = 0; location < 80; location++) {
+        while ((ch = fgetc(fp)) != EOF) {
+            if (ch == '.' || (ch >= MIN_VALUE && ch <= MAX_VALUE)) {
+                setCell(game, location, ch);
             }
         }
     }
+
     fclose(fp);
+}
+int isLegal (sudokoGrid game, cell location, value candidateDigit) {
+    // i should move the condition x == EMPTY_VALUE || ( x >= MIN_VALUE && x <= MIN_VALUE )
+    // here
+
+    return 0;
+    
 }
 
 void showGame (sudokoGrid game) {
+    printf ("showGame()\n");
 
+    FILE *fp;
+    fp = fopen("grid.txt", "r");
+
+    if (fp == 0) {
+        printf ("Could not open file!\n");
+    }
+    
+    int i = 1; // control loop var
+
+    value ch;
+
+    while ((ch = fgetc(fp)) != EOF) {
+        printf ("%c ", ch) ;
+
+        if ( (i%9) == 0 ) {
+            printf (" \n");
+        }
+        i++;
+        
+    }
+    
 }
 
-void showInitialGame (sudokoGrid game) {
-    // TODO FIRST
+void showInitialGame (sudokoGrid game, FILE *file) {
+    // should read the file and print the game in suitable format 
+    // new line on 9 element; spaces between elements
 }
 
 void setCell (sudokoGrid game, cell location, value digit) {
 
+    game[location] = digit;
+    
 }
 
 value getCell (sudokoGrid game, cell location) {
@@ -134,9 +166,3 @@ cell getEmptyCell (sudokoGrid game) {
     return 0;
 }
 
-int isLegal (sudokoGrid game, cell location, value candidateDigit) {
-    // i should move the condition x == EMPTY_VALUE || ( x >= MIN_VALUE && x <= MIN_VALUE )
-    // here
-    return 0;
-    
-}

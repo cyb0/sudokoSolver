@@ -24,7 +24,8 @@ void readGame (sudokoGrid game);
 void showGame (sudokoGrid game);
 
 // display the initial state of the game grid
-void showInitialGame (sudokoGrid game);
+void showInitialGame (sudokoGrid game, FILE *file);
+
 // sets the specified cell to the specified digit
 // assumes cell and digit are in legal range
 void setCell (sudokoGrid game, cell location, value digit);
