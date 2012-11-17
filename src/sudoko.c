@@ -37,14 +37,27 @@ int main (int argc, const char * arg []) {
 
 
     // TODO: read the initial grid 
-    readGame(sample);
+    readGame (sample);
 
-    showGame (sample);
+    int a; 
+    a = sizeof(sample);
+    printf ("sizeof sample: %d \n", a);
 
-    if (hasSolution(sample)) {
-        showGame(sample);
+    value l_value;
+    cell location = 3;
+    l_value = getCell(sample, location);
+
+    printf("game location [3] is: %c \n", l_value);
+
+    a = isFull(sample);
+    
+    printf("is the game full: %d\n 0 - not full; 1 - is full\n" , a);
+
+    showInitialGame (sample);
+    
+    if (hasSolution (sample)) {
+        showGame (sample);
     }
-
     return 0;
 }
 
@@ -53,21 +66,21 @@ int hasSolution (sudokoGrid game) {
     cell candidateCell;
     value trialValue;
 
-    if (isFull(game) ) { 
+    if (isFull (game)) { 
         solved = TRUE;
     } else {
-        candidateCell = getEmptyCell(game);
+        candidateCell = getEmptyCell (game);
         trialValue = MIN_VALUE;
         solved = FALSE;
 
         while (!solved && (trialValue <= MAX_VALUE)) {
-            if (isLegal(game, candidateCell, trialValue)) {
-                setCell(game, candidateCell, trialValue);
+            if (isLegal (game, candidateCell, trialValue)) {
+                setCell (game, candidateCell, trialValue);
 
-                if (hasSolution(game)) {
+                if (hasSolution (game)) {
                     solved = TRUE;
                 } else {
-                    clearCell(game, candidateCell);
+                    clearCell (game, candidateCell);
                 }   
              }   
             trialValue ++; 
@@ -92,77 +105,108 @@ void readGame (sudokoGrid game) {
     cell location; // loop control 
     value ch; // character from file
 
-    for (location = 0; location < 80; location++) {
-        while ((ch = fgetc(fp)) != EOF) {
-            if (ch == '.' || (ch >= MIN_VALUE && ch <= MAX_VALUE)) {
-                setCell(game, location, ch);
-            }
+    // load the array with the values froom file
+    for (location = 0;  ((ch = fgetc (fp)) != EOF) && location <= MAX_CELL; location++) {
+        if (isLegalBasic(game, location, ch)) {
+            setCell (game, location, ch);
         }
     }
-
     fclose(fp);
 }
-int isLegal (sudokoGrid game, cell location, value candidateDigit) {
-    // i should move the condition x == EMPTY_VALUE || ( x >= MIN_VALUE && x <= MIN_VALUE )
-    // here
 
-    return 0;
+int isLegal (sudokoGrid game, cell location, value candidateDigit) {
+
+    return FALSE;
+}
+
+int isLegalBasic (sudokoGrid game, cell location, value candidateDigit) {
+    // basic data clarity check
+    int isLegal;
+
+    if (candidateDigit == EMPTY_VALUE || (candidateDigit >= MIN_VALUE && candidateDigit <= MAX_VALUE)) {
+        isLegal = TRUE;
+    } else {
+        isLegal = FALSE;
+    }
+    return isLegal;
     
 }
 
 void showGame (sudokoGrid game) {
-    printf ("showGame()\n");
 
-    FILE *fp;
+    printf("!!!END OF THE PROGRAM!!!\n");
+}
+
+void showInitialGame (sudokoGrid game) {
+    // should read the file and print the game in suitable format 
+    // new line on 9 element; spaces between elements
+
+/*  FILE *fp;
     fp = fopen("grid.txt", "r");
 
     if (fp == 0) {
         printf ("Could not open file!\n");
     }
-    
-    int i = 1; // control loop var
+*/ 
+    int i; // loop control 0/9 = 0 ;)
 
-    value ch;
+    for (i = 0; i <= MAX_CELL; i++) {
 
-    while ((ch = fgetc(fp)) != EOF) {
-        printf ("%c ", ch) ;
-
-        if ( (i%9) == 0 ) {
-            printf (" \n");
+        if (i != 0 && ((i%9) == 0)) {
+            printf ("\n");
         }
-        i++;
-        
+        printf ("%c ", game[i]);
     }
-    
+    printf ("\n");
 }
-
-void showInitialGame (sudokoGrid game, FILE *file) {
-    // should read the file and print the game in suitable format 
-    // new line on 9 element; spaces between elements
-}
-
+ 
 void setCell (sudokoGrid game, cell location, value digit) {
 
     game[location] = digit;
-    
+
 }
 
 value getCell (sudokoGrid game, cell location) {
 
-    return 0;
+    value ch;
+    ch = game[location];
+    return ch;
+
 }
 
 void clearCell (sudokoGrid game, cell location) {
 
+    game[location] = EMPTY_VALUE;
+
 }
 
 int isFull (sudokoGrid game) {
-    
-    return 0;
+
+    int i;
+    int isFull;
+
+    for (i = 0; i <= MAX_CELL; i++) {
+        if ((game[i] == EMPTY_VALUE)) {
+            isFull = FALSE;
+            break;
+        } else {
+            isFull = TRUE;
+        }
+    }
+    return isFull;
 }
 
 cell getEmptyCell (sudokoGrid game) {
 
-    return 0;
+    int i;
+    cell location;
+
+    for (i = 0; i <= MAX_CELL; i++) {
+        if (game[i] == EMPTY_VALUE) {
+           location = i;
+           break;
+        }
+    }
+    return location;
 }
 

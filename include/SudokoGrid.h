@@ -4,8 +4,8 @@
 #define MAX_VALUE '9'
 #define EMPTY_VALUE '.'
 #define NUM_VALUES (MAX_VALUE - MIN_VALUE + 1)
-#define GRID_SIZE (NUM_VALUES * NUM_VALUES)
-#define MAX_CELL (GRID_SIZE - 1)
+#define GRID_SIZE (NUM_VALUES * NUM_VALUES) // max values: 81
+#define MAX_CELL (GRID_SIZE - 1) // the last cell: 80
 
 #define TRUE 1
 #define FALSE 0
@@ -20,11 +20,16 @@ int hasSolution (sudokoGrid game);
 // EMPTY_VALUE means blank, cell, digits are digist, all else is ignored
 void readGame (sudokoGrid game);
 
+// non-zero if it would be legal to set the specified digit
+int isLegal (sudokoGrid game, cell location, value candidateDigit);
+
+int isLegalBasic (sudokoGrid game, cell location, value candidateDigit);
+
 // dispay a suduko game in a format which can be read by readers
 void showGame (sudokoGrid game);
 
 // display the initial state of the game grid
-void showInitialGame (sudokoGrid game, FILE *file);
+void showInitialGame (sudokoGrid game);
 
 // sets the specified cell to the specified digit
 // assumes cell and digit are in legal range
@@ -43,8 +48,3 @@ int isFull (sudokoGrid game);
 
 // returns the location of a blank cell, assumes ...
 cell getEmptyCell (sudokoGrid game);
-
-// non-zero if it would be legal to set the specified digit
-int isLegal (sudokoGrid game, cell location, value candidateDigit);
-
-

@@ -6,7 +6,7 @@ BUILD	=	./build
 
 all:	clean
 					
-				$(GCC) -Wall -Werror -I $(INC) -o $(BUILD)/sudoko.o $(SRC)/sudoko.c
+				$(GCC) -Wall -Werror -g -I $(INC) -o $(BUILD)/sudoko.o $(SRC)/sudoko.c
 
 clean:
 
